@@ -59,7 +59,8 @@ public class Offsetter {
         newNode.polygon.append(path[0])
         var j = 0
         var k = 0
-        for i in 1...highI {
+        var i = 1
+        while i <= highI {
             if newNode.polygon[j] != path[i] {
                 j += 1
                 newNode.polygon.append(path[i])
@@ -69,6 +70,7 @@ public class Offsetter {
                     k = j
                 }
             }
+            i += 1
         }
 
         if endType == .closedPolygon && j < 2 {
@@ -122,13 +124,13 @@ public class Offsetter {
     
     
     func getUnitNormal(_ pt1: CGPoint, _ pt2: CGPoint) -> CGPoint {
-        var dx = (pt2.x - pt1.x)
-        var dy = (pt2.y - pt1.y)
+        var dx = pt2.x - pt1.x
+        var dy = pt2.y - pt1.y
         if dx == 0 && dy == 0 {
             return .zero
         }
         
-        let f = 1 * 1.0 / sqrt(dx * dx + dy * dy)
+        let f = 1.0 / sqrt(dx * dx + dy * dy)
         dx *= f
         dy *= f
         
@@ -152,7 +154,7 @@ public class Offsetter {
         
         //see offset_triginometry3.svg in the documentation folder ...
         if miterLimit > 2 {
-            miterLim = 2 / (miterLimit * miterLimit)
+            miterLim = 2 / miterLimit * miterLimit
         } else {
             miterLim = 0.5
         }
@@ -167,11 +169,11 @@ public class Offsetter {
             y = arcTolerance
         }
         //see offset_triginometry2.svg in the documentation folder ...
-        let steps = Int(CGFloat.pi / acos(1 - y / abs(delta)))
+        let steps = CGFloat.pi / acos(1 - y / abs(delta))
         
-        sin = CoreGraphics.sin(TwoPi / steps.cgFloat)
-        cos = CoreGraphics.cos(TwoPi / steps.cgFloat)
-        stepsPerRad = steps.cgFloat / TwoPi
+        sin = CoreGraphics.sin(TwoPi / steps)
+        cos = CoreGraphics.cos(TwoPi / steps)
+        stepsPerRad = steps / TwoPi
         if delta < 0.0 {
             sin = -sin
         }
@@ -186,14 +188,13 @@ public class Offsetter {
                 continue
             }
             
-            
             destPoly = Path()
             
             if len == 1 {
                 if node.joinType == .round {
                     var x: CGFloat = 1.0
                     var y: CGFloat = 0.0
-                    for _ in 1...steps {
+                    for _ in 1...steps.int {
                         destPoly.append([round(srcPoly[0].x + x * delta), round(srcPoly[0].y + y * delta)])
                         let x2 = x
                         x = x * cos - sin * y
@@ -204,9 +205,9 @@ public class Offsetter {
                     var y: CGFloat = -1.0
                     for _ in 0...3 {
                         destPoly.append([round(srcPoly[0].x + x * delta), round(srcPoly[0].y + y * delta)])
-                        if (x < 0) {
+                        if x < 0 {
                             x = 1
-                        } else if (y < 0) {
+                        } else if y < 0 {
                             y = 1
                         } else {
                             x = -1
@@ -236,8 +237,7 @@ public class Offsetter {
                     offsetPoint(j, &k, node.joinType)
                 }
                 destPolys.append(destPoly)
-            }
-            else if node.endType == .closedLine {
+            } else if node.endType == .closedLine {
                 var k = len - 1
                 for j in 0..<len {
                     offsetPoint(j, &k, node.joinType)
@@ -246,13 +246,17 @@ public class Offsetter {
                 destPoly = Path()
                 //re-build normals ...
                 let n = normals[len - 1]
-                for j in (1...len - 1).reversed() {
+                var j = len - 1
+                while j >= 1 {
                     normals[j] = [-normals[j - 1].x, -normals[j - 1].y]
+                    j -= 1
                 }
                 normals[0] = [-n.x, -n.y]
                 k = 0
-                for j in (0...len - 1).reversed() {
+                j = len - 1
+                while j >= 0 {
                     offsetPoint(j, &k, node.joinType)
+                    j -= 1
                 }
                 destPolys.append(destPoly)
             } else {
@@ -281,15 +285,19 @@ public class Offsetter {
                 }
                 
                 //re-build normals ...
-                for j in (1...len - 1).reversed() {
+                var j = len - 1
+                while j >= 1 {
                     normals[j] = [-normals[j - 1].x, -normals[j - 1].y]
+                    j -= 1
                 }
                 
                 normals[0] = [-normals[1].x, -normals[1].y]
                 
                 k = len - 1
-                for j in (1...k-1).reversed() {
+                j = k-1
+                while j >= 1 {
                     offsetPoint(j, &k, node.joinType)
+                    j -= 1
                 }
                 
                 if node.endType == .openButt {
@@ -415,11 +423,11 @@ public class Offsetter {
             destPoly.append(srcPoly[j])
             destPoly.append([round(srcPoly[j].x + normals[j].x * delta),round(srcPoly[j].y + normals[j].y * delta)])
         } else {
-            switch (joinType) {
+            switch joinType {
             case .miter:
                 let r = 1 + (normals[j].x * normals[k].x +
                     normals[j].y * normals[k].y)
-                if (r >= miterLim) {
+                if r >= miterLim {
                     doMiter (j, k, r)
                 } else {
                     doSquare (j, k)
@@ -427,8 +435,8 @@ public class Offsetter {
             case .square:doSquare (j, k)
             case .round: doRound (j, k)
             }
-            k = j
         }
+        k = j
     }
     
     private func doSquare (_ j: Int, _ k: Int) {

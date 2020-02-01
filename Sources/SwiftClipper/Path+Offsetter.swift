@@ -10,9 +10,10 @@ import CoreGraphics
 
 extension Path {
     
-    func offset(_ delta: CGFloat) -> Paths {
+    public func offset(_ delta: CGFloat) -> Paths {
         let o = Offsetter()
         var solution = Paths()
+        o.addPath(self, joinType: .miter, endType: .closedLine)
         _ = try? o.execute(&solution, delta: delta)
         return solution
     }
