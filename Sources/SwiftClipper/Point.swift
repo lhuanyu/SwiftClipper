@@ -7,6 +7,21 @@
 
 import CoreGraphics
 
+extension CGPoint: ExpressibleByArrayLiteral {
+    
+    public init(arrayLiteral elements: CGFloat...) {
+        self.init()
+        if elements.count > 1 {
+            self.x = elements[0]
+            self.y = elements[1]
+        } else {
+            self.x = 0
+            self.y = 0
+        }
+    }
+        
+}
+
 extension CGPoint {
     
     public func isSlopesEqual(_ pt1: CGPoint, _ pt3: CGPoint) -> Bool {
@@ -50,20 +65,20 @@ extension CGPoint {
         //this function is more accurate when the point that's GEOMETRICALLY
         //between the other 2 points is the one that's tested for distance.
         //nb: with 'spikes', either pt1(self) or pt3 is geometrically between the other pts
-        if (abs(self.x - pt2.x) > abs(self.y - pt2.y)){
-            if ((self.x > pt2.x) == (self.x < pt3.x)) {
+        if abs(self.x - pt2.x) > abs(self.y - pt2.y) {
+            if (self.x > pt2.x) == (self.x < pt3.x) {
                 return self.distanceFromLineSqrd(pt2, pt3) < distSqrd
             }
-            else if ((pt2.x > self.x) == (pt2.x < pt3.x)) {
+            else if (pt2.x > self.x) == (pt2.x < pt3.x) {
                 return pt2.distanceFromLineSqrd(self, pt3) < distSqrd
             }
             else {
                 return pt3.distanceFromLineSqrd(self, pt2) < distSqrd
             }
         } else {
-            if ((self.y > pt2.y) == (self.y < pt3.y)) {
+            if (self.y > pt2.y) == (self.y < pt3.y) {
                 return self.distanceFromLineSqrd(pt2, pt3) < distSqrd
-            } else if ((pt2.y > self.y) == (pt2.y < pt3.y)) {
+            } else if (pt2.y > self.y) == (pt2.y < pt3.y) {
                 return pt2.distanceFromLineSqrd(self, pt3) < distSqrd
             } else {
                 return pt3.distanceFromLineSqrd(self, pt2) < distSqrd
@@ -103,3 +118,16 @@ extension CGPoint {
 
     
 }
+
+extension Int {
+    var cgFloat: CGFloat {
+        return CGFloat(self)
+    }
+}
+
+extension CGFloat {
+    var int: Int {
+        return Int(self)
+    }
+}
+
