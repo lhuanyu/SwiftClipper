@@ -1,7 +1,7 @@
 # SwiftClipper
 
 **This package is basically a Swift translation of the [Clipper Lib](http://www.angusj.com/delphi/clipper.php) authored by Angusj.**
-For the consideration of complexity and performance, some features(like big integer support, line clipping) has  been temporarily removed. Most codes are reorganized or rewritten in a Swift convention.
+For the consideration of complexity and performance, some features(like big integer support, line clipping) have been temporarily removed. Most codes are reorganized or rewritten in a Swift convention.
 
 ## Usage
 
@@ -39,6 +39,6 @@ Additonal userful functions for geometry caculations are also included in these 
 
 ## Note
 
-The original lib use integer numeric for caculations due to the presicion issue. For some cases, use a minor floating number as coordinates can reach a unpredicable or unprecise result. **If you want to a more precise result, try to use a magnification scale for your numbers**.
+The original lib uses integer numeric for caculations due to the presicion issue. For some cases, using a minor floating number as coordinates can reach a unpredicable or unprecise result. **If you want to a more precise result, try to use a magnification scale for your numbers**.
 
 
