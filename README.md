@@ -35,7 +35,7 @@ c.addPath(path1, .subject, isClosed)
 c.addPath(path2, .clip, isClosed)
 try c.execute(clipType: .difference, solution: &paths)
 ```
-Additonal userful functions for geometry caculations are also included in these extensions. For details, check Path+Geometry.swift and Point.swift.
+Additonal userful functions for geometry caculations are also included in these extensions. For details, check [Path+Geometry.swift](https://github.com/lhuanyu/SwiftClipper/blob/master/Sources/SwiftClipper/Path+Geometry.swift) and [Point.swift](https://github.com/lhuanyu/SwiftClipper/blob/master/Sources/SwiftClipper/Point.swift).
 
 ## Note
 
