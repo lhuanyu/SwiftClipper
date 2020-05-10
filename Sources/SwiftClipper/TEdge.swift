@@ -20,13 +20,18 @@ public class TEdge {
     var windCnt: Int = 0
     var windCnt2: Int = 0 //winding count of the opposite polytype
     var outIdx: Int =  Unassigned
-    var next: TEdge!
-    var prev: TEdge!
-    var nextInLML: TEdge?
-    var nextInAEL: TEdge?
-    var prevInAEL: TEdge?
-    var nextInSEL: TEdge?
-    var prevInSEL: TEdge?
+    
+    weak var next: TEdge! /// edge is strongly referenced  by clipper, make it weak to resolve retain cycle.
+    weak var prev: TEdge!
+    weak var nextInLML: TEdge?
+    weak var nextInAEL: TEdge?
+    weak var prevInAEL: TEdge?
+    weak var nextInSEL: TEdge?
+    weak var prevInSEL: TEdge?
+    
+    deinit {
+//        print("TEdge deinit.")
+    }
 }
 
 extension TEdge: Equatable {

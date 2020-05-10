@@ -55,6 +55,7 @@ public class Clipper: ClipperBase {
     
     @discardableResult
     public func execute(clipType: ClipType, solution:inout Paths, subjFillType: PolyFillType, clipFillType: PolyFillType ) throws ->  Bool {
+
         if executeLocked {
             return false
         }
@@ -77,12 +78,15 @@ public class Clipper: ClipperBase {
         } catch {
             
         }
+        
+        clearOutRecs()
         executeLocked = false
         return succeeded
     }
     
     @discardableResult
     public func execute(clipType: ClipType, polytree: PolyTree, subjFillType: PolyFillType, clipFillType: PolyFillType) throws ->  Bool {
+
         if executeLocked {
             return false
         }
@@ -98,7 +102,8 @@ public class Clipper: ClipperBase {
         if succeeded {
             buildResult2(polytree)
         }
-        // DisposeAllPolyPts()
+        
+        clearOutRecs()
         executeLocked = false
         return succeeded
     }

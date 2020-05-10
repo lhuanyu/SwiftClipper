@@ -16,6 +16,16 @@ class OutRec {
     var pts: OutPt!
     var bottomPt: OutPt?
     var polyNode: PolyNode?
+    
+    func clear() {
+        var pt = pts?.next
+        while pt != pts {
+            let next = pt?.next
+            pt?.next = nil
+            pt?.prev = nil
+            pt = next
+        }
+    }
 }
 
 extension OutRec: Equatable {

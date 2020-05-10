@@ -74,6 +74,10 @@ public class ClipperBase {
         hasOpenPaths = false
     }
     
+    deinit {
+//        print("Clipper deinit.")
+    }
+    
     
     private func disposeLocalMinimaList() {
         while minimaList != nil {
@@ -511,9 +515,10 @@ public class ClipperBase {
         return result
     }
     
-    func disposeOutRec(at index: Int) {
-        let outRec = polyOuts[index]
-        outRec.pts = nil
+    func clearOutRecs() {
+        for poly in polyOuts {
+            poly.clear()
+        }
     }
     
     func updateEdgeIntoAEL(_ e:inout TEdge) throws {
