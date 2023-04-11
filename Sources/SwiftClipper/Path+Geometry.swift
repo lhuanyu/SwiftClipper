@@ -17,12 +17,15 @@ extension Path {
         }
         
         var a:CGFloat = 0.0
-        var j = size - 1
-        for i in self.indices {
-            a += (self[j].y + self[i].x) * (self[j].y - self[i].y)
-            j = i
+        var i = 0
+        while i < self.count - 1 {
+            a += self[i].x * self[i+1].y
+            a -= self[i+1].x * self[i].y
+            i += 1
         }
-        return -a * 0.5
+        a += self[count-1].x * self[0].y
+        a -= self[0].x * self[count-1].y
+        return abs(a * 0.5)
     }
     
     public var circumference: CGFloat {
